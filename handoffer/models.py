@@ -27,7 +27,7 @@ class ProviderConfig(BaseModel):
     id: str
     name: str
     executable: str
-    source: Literal["command", "json_file", "disabled"] = "disabled"
+    source: Literal["codex_app_server", "command", "json_file", "disabled"] = "disabled"
     command: list[str] | None = None
     json_file: str | None = None
     delegate_command: list[str] | None = None

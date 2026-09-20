@@ -17,6 +17,10 @@ with tempfile.TemporaryDirectory() as directory:
     assert result.weekly.remaining_percent == 80
 print("self-check passed")
 
+five_hour, weekly = __import__("handoffer.providers", fromlist=["_decode"])._decode({"rateLimits": {"primary": {"usedPercent": 33, "resetsAt": 1789908543}, "secondary": {"usedPercent": 21}}})
+assert five_hour.remaining_percent == 67 and weekly.remaining_percent == 79
+print("codex decode check passed")
+
 with tempfile.TemporaryDirectory() as directory:
     directory = Path(directory)
     source = directory / "limits.json"

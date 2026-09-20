@@ -9,6 +9,7 @@ zsh "$root/scripts/build-mac-app.sh"
 mkdir -p "$HOME/.config/handoffer/hooks"
 cat > "$HOME/.config/handoffer/serve" <<EOF
 #!/bin/zsh
+export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
 exec "$venv/bin/handoffer" serve
 EOF
 chmod +x "$HOME/.config/handoffer/serve"

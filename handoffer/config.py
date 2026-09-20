@@ -9,7 +9,7 @@ from .models import ProviderConfig, Settings
 
 CONFIG_PATH = Path(os.environ.get("HANDOFF_CONFIG", Path.home() / ".config" / "handoffer" / "config.json"))
 DEFAULTS = [
-    ProviderConfig(id="codex", name="Codex", executable="codex"),
+    ProviderConfig(id="codex", name="Codex", executable="codex", source="codex_app_server"),
     ProviderConfig(id="claude", name="Claude Code", executable="claude"),
     ProviderConfig(id="muse", name="Muse Code", executable="muse"),
     ProviderConfig(id="gemini", name="Gemini CLI", executable="gemini"),
@@ -20,7 +20,11 @@ DEFAULTS = [
 def load_settings() -> Settings:
     if not CONFIG_PATH.exists():
         return Settings(providers=DEFAULTS)
-    return Settings.model_validate_json(CONFIG_PATH.read_text())
+    settings = Settings.model_validate_json(CONFIG_PATH.read_text())
+    for provider in settings.providers:
+        if provider.id == "codex" and provider.source == "disabled" and not provider.command and not provider.json_file:
+            provider.source = "codex_app_server"
+    return settings
 
 
 def save_settings(settings: Settings) -> Settings:
