@@ -23,8 +23,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func startServer() {
         let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/bin/zsh")
-        process.arguments = ["-lc", "~/.config/handoffer/serve >/tmp/handoffer.log 2>&1 &"]
+        process.executableURL = URL(fileURLWithPath: NSHomeDirectory() + "/.config/handoffer/serve")
         try? process.run()
     }
 
