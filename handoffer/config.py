@@ -10,7 +10,7 @@ from .models import ProviderConfig, Settings
 CONFIG_PATH = Path(os.environ.get("HANDOFF_CONFIG", Path.home() / ".config" / "handoffer" / "config.json"))
 DEFAULTS = [
     ProviderConfig(id="codex", name="Codex", executable="codex", source="codex_app_server"),
-    ProviderConfig(id="claude", name="Claude Code", executable="claude"),
+    ProviderConfig(id="claude", name="Claude Code", executable="claude", source="json_file", json_file="~/.config/handoffer/claude-limits.json"),
     ProviderConfig(id="muse", name="Muse Code", executable="muse"),
     ProviderConfig(id="gemini", name="Gemini CLI", executable="gemini"),
     ProviderConfig(id="aider", name="Aider", executable="aider"),
@@ -24,6 +24,9 @@ def load_settings() -> Settings:
     for provider in settings.providers:
         if provider.id == "codex" and provider.source == "disabled" and not provider.command and not provider.json_file:
             provider.source = "codex_app_server"
+        if provider.id == "claude" and provider.source == "disabled" and not provider.command and not provider.json_file:
+            provider.source = "json_file"
+            provider.json_file = "~/.config/handoffer/claude-limits.json"
     return settings
 
 

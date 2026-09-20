@@ -22,6 +22,14 @@ assert five_hour.remaining_percent == 67 and weekly.remaining_percent == 79
 print("codex decode check passed")
 
 with tempfile.TemporaryDirectory() as directory:
+    import handoffer.capture as capture
+    capture.CLAUDE_LIMITS = Path(directory) / "claude-limits.json"
+    assert capture.capture_claude(json.dumps({"rate_limits": {"five_hour": {"used_percentage": 12}, "seven_day": {"used_percentage": 34}}}))
+    saved = json.loads(capture.CLAUDE_LIMITS.read_text())
+    assert saved["five_hour"]["used_percent"] == 12 and saved["weekly"]["used_percent"] == 34
+print("claude capture check passed")
+
+with tempfile.TemporaryDirectory() as directory:
     directory = Path(directory)
     source = directory / "limits.json"
     source.write_text(json.dumps({"five_hour": {"used_percent": 96}, "weekly": {"used_percent": 10}}))
