@@ -34,3 +34,5 @@ Expected source output:
 `handoffer hook --agent claude --repo /repo` reads current configured usage. At or above `threshold_percent` it deterministically writes `/repo/HANDOFF.md` and returns exit code `42`; below it returns `0`. An existing handoff is never overwritten. Default policy never delegates. Set `auto_delegate: true` only with a `delegate_command` configured on target provider; it picks agent with greatest minimum remaining window and passes `HANDOFF_FILE`, `HANDOFF_REPO`, and `HANDOFF_FROM`.
 
 Hook adapters: [integrations/README.md](integrations/README.md).
+
+Setup safely merges the Claude Code pre-tool hook into `~/.claude/settings.json`.
