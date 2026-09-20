@@ -17,7 +17,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem.menu = menu
         statusItem.button?.title = "Handoff —"
         startServer()
-        refresh()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { self.refresh() }
         timer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(refresh), userInfo: nil, repeats: true)
     }
 
