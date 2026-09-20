@@ -12,6 +12,8 @@ cat > "$HOME/.config/handoffer/serve" <<EOF
 exec "$venv/bin/handoffer" serve
 EOF
 chmod +x "$HOME/.config/handoffer/serve"
+"$venv/bin/handoffer" background install
+ditto "$root/dist/Handoffer.app" "/Applications/Handoffer.app"
 cat > "$HOME/.config/handoffer/hooks/check-limit" <<EOF
 #!/bin/zsh
 exec "$venv/bin/handoffer" hook --agent "\${1:?agent id}" --repo "\${PWD}" --summary "\${2:-}"
@@ -31,6 +33,6 @@ if not any(item.get("matcher") == ".*" and any(hook.get("command") == command fo
     hooks.append({"matcher": ".*", "hooks": [{"type": "command", "command": command, "timeout": 30}]})
 path.write_text(json.dumps(settings, indent=2) + "\n")
 PY
-echo "Installed. Start dashboard: $venv/bin/handoffer serve"
-echo "Open menu app: open $root/dist/Handoffer.app"
+echo "Installed. Background server: $venv/bin/handoffer background status"
+echo "Open menu app: open /Applications/Handoffer.app"
 echo "Hook command: $HOME/.config/handoffer/hooks/check-limit claude"

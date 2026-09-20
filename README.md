@@ -15,6 +15,8 @@ Verify: `.venv/bin/python tests/self_check.py`
 
 Dashboard: `http://127.0.0.1:8765`.
 
+Setup installs `/Applications/Handoffer.app` and a per-user LaunchAgent. The server starts at login, restarts after an unexpected exit, and survives closing the menu app. Control it with `.venv/bin/handoffer background status|stop|install`.
+
 The menu app is an accessory app: closing its dashboard leaves its top-bar icon running. Use **Quit Handoffer** to stop it.
 
 ## Connect real limits

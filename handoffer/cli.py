@@ -6,6 +6,7 @@ import sys
 import uvicorn
 
 from .config import discover, load_settings, save_settings
+from .background import install as install_background, status as background_status, stop as stop_background
 from .handoff import run_hook
 
 
@@ -19,6 +20,8 @@ def main() -> None:
     hook.add_argument("--agent", required=True)
     hook.add_argument("--repo")
     hook.add_argument("--summary", default="")
+    background = commands.add_parser("background")
+    background.add_argument("action", choices=["install", "stop", "status"])
     args = parser.parse_args()
     if args.command == "serve":
         uvicorn.run("handoffer.app:app", host="127.0.0.1", port=8765)
@@ -27,6 +30,8 @@ def main() -> None:
         if args.write_config:
             save_settings(settings)
         print("Detected: " + ", ".join(item.name for item in settings.providers if __import__("shutil").which(item.executable)))
+    elif args.command == "background":
+        {"install": install_background, "stop": stop_background, "status": background_status}[args.action]()
     else:
         sys.exit(run_hook(args.agent, args.repo, args.summary))
 
