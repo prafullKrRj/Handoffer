@@ -1,6 +1,5 @@
 import AppKit
 
-@main
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     private var timer: Timer?
@@ -25,8 +24,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func startServer() {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: NSHomeDirectory() + "/.config/handoffer/serve")
-        try? process.run()
-        server = process
+        let logURL = URL(fileURLWithPath: "/tmp/handoffer.log")
+        FileManager.default.createFile(atPath: logURL.path, contents: nil)
+        let log = try? FileHandle(forWritingTo: logURL)
+        process.standardOutput = log
+        process.standardError = log
+        do {
+            try process.run()
+            server = process
+        } catch {
+            statusItem.button?.title = "Handoff !"
+        }
     }
 
     @objc private func openDashboard() {
@@ -46,5 +54,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             }
             DispatchQueue.main.async { self.statusItem.button?.title = values.isEmpty ? "Handoff —" : "Handoff \\(values.min() ?? 0)%" }
         }.resume()
+    }
+}
+
+@main
+struct HandofferMain {
+    static func main() {
+        let app = NSApplication.shared
+        let delegate = AppDelegate()
+        app.delegate = delegate
+        app.setActivationPolicy(.accessory)
+        app.run()
     }
 }
