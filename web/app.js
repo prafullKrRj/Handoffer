@@ -81,3 +81,4 @@ $('#settings-form').addEventListener('submit', async (event) => {
   }
 });
 refresh();
+setInterval(refresh, 60_000);
