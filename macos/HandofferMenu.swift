@@ -16,7 +16,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(NSMenuItem(title: "Quit Handoffer", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         statusItem.menu = menu
         statusItem.button?.title = "Handoff —"
-        startServer()
+        ensureServer()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { self.refresh() }
         timer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(refresh), userInfo: nil, repeats: true)
     }
@@ -35,6 +35,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         } catch {
             statusItem.button?.title = "Handoff !"
         }
+    }
+
+    private func ensureServer() {
+        let health = URL(string: "http://127.0.0.1:8765/api/status")!
+        URLSession.shared.dataTask(with: health) { [weak self] _, response, error in
+            if error != nil || (response as? HTTPURLResponse)?.statusCode != 200 {
+                self?.startServer()
+            }
+        }.resume()
     }
 
     @objc private func openDashboard() {
