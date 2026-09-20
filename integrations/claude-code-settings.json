@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/handoffer/hooks/check-limit claude",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

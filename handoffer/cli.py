@@ -1,0 +1,35 @@
+from __future__ import annotations
+
+import argparse
+import sys
+
+import uvicorn
+
+from .config import discover, load_settings, save_settings
+from .handoff import run_hook
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(prog="handoffer")
+    commands = parser.add_subparsers(dest="command", required=True)
+    commands.add_parser("serve")
+    setup = commands.add_parser("setup")
+    setup.add_argument("--write-config", action="store_true")
+    hook = commands.add_parser("hook")
+    hook.add_argument("--agent", required=True)
+    hook.add_argument("--repo")
+    hook.add_argument("--summary", default="")
+    args = parser.parse_args()
+    if args.command == "serve":
+        uvicorn.run("handoffer.app:app", host="127.0.0.1", port=8765)
+    elif args.command == "setup":
+        settings = discover(load_settings())
+        if args.write_config:
+            save_settings(settings)
+        print("Detected: " + ", ".join(item.name for item in settings.providers if __import__("shutil").which(item.executable)))
+    else:
+        sys.exit(run_hook(args.agent, args.repo, args.summary))
+
+
+if __name__ == "__main__":
+    main()

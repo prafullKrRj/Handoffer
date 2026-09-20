@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Handoffer agent capacity dashboard">
+    <title>Handoffer · Capacity</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <a class="brand" href="/">
+          <span class="brand-mark" aria-hidden="true">↗</span>
+          <span>handoffer</span>
+        </a>
+        <div class="topbar-actions">
+          <span id="last-updated" class="muted">Not synced</span>
+          <button id="refresh-button" class="button button-ghost" type="button">
+            <span class="refresh-icon" aria-hidden="true">↻</span> Refresh
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div>
+            <p class="eyebrow">Operations / Agent capacity</p>
+            <h1>Know who can take the handoff.</h1>
+            <p class="hero-copy">Live usage across connected agents, with policy controls for safe delegation.</p>
+          </div>
+          <div class="hero-status" id="connection-status" data-state="loading">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span>Connecting…</span>
+          </div>
+        </section>
+
+        <section class="summary-grid" aria-label="Capacity summary">
+          <article class="summary-card summary-primary">
+            <div class="summary-label">Available now</div>
+            <div class="summary-value" id="available-count">—</div>
+            <div class="summary-foot"><span id="agent-count">—</span> connected agents</div>
+          </article>
+          <article class="summary-card">
+            <div class="summary-label">Healthy capacity</div>
+            <div class="summary-value" id="healthy-percent">—</div>
+            <div class="summary-foot">under policy threshold</div>
+          </article>
+          <article class="summary-card">
+            <div class="summary-label">Auto-delegate</div>
+            <div class="summary-value summary-value-text" id="auto-delegate-summary">—</div>
+            <div class="summary-foot">policy setting</div>
+          </article>
+        </section>
+
+        <div class="content-grid">
+          <section class="panel agents-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Connected agents</p>
+                <h2>Capacity by agent</h2>
+              </div>
+              <span id="agent-total-pill" class="pill">—</span>
+            </div>
+            <div id="agents-list" class="agents-list" aria-live="polite">
+              <div class="empty-state">Loading agent capacity…</div>
+            </div>
+          </section>
+
+          <aside class="panel settings-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Delegation policy</p>
+                <h2>Settings</h2>
+              </div>
+              <span class="settings-icon" aria-hidden="true">⚙</span>
+            </div>
+            <form id="settings-form">
+      <label class="field-label" for="threshold">Handoff trigger</label>
+              <div class="range-row">
+                <input id="threshold" name="threshold_percent" type="range" min="0" max="100" step="1" value="20">
+                <output id="threshold-output" for="threshold">20%</output>
+              </div>
+      <p class="field-help">Create handoff when either usage window reaches this level.</p>
+              <label class="toggle-row" for="auto-delegate">
+                <span>
+                  <strong>Auto-delegate</strong>
+                  <small>Route eligible handoffs automatically.</small>
+                </span>
+                <span class="switch"><input id="auto-delegate" name="auto_delegate" type="checkbox"><span class="switch-track"></span></span>
+              </label>
+              <button class="button button-primary save-button" type="submit">Save settings</button>
+              <p id="settings-feedback" class="form-feedback" role="status"></p>
+            </form>
+          </aside>
+        </div>
+      </main>
+
+      <footer class="footer"><span>Handoffer</span><span>Capacity refreshes on demand</span></footer>
+    </div>
+  <script src="/static/app.js"></script>
+  </body>
+</html>

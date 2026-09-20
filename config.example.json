@@ -1,0 +1,20 @@
+{
+  "threshold_percent": 95,
+  "auto_delegate": false,
+  "providers": [
+    {
+      "id": "codex",
+      "name": "Codex",
+      "executable": "codex",
+      "source": "json_file",
+      "json_file": "~/.config/handoffer/codex-limits.json"
+    },
+    {
+      "id": "claude",
+      "name": "Claude Code",
+      "executable": "claude",
+      "source": "command",
+      "command": ["/absolute/path/to/claude-limit-exporter"]
+    }
+  ]
+}
